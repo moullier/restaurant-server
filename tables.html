@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurant</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Hot Restaurant</h1>
+
+      <h3>View Tables!</h3>
+      <hr>
+      <a href="./reservation"><button class="btn btn-danger btn-lg"><span class="fa fa-eye"></span>Make Reservation</button></a>
+      <a href="./index"><button class="btn btn-secondary btn-lg"><span class="fa fa-home"></span></button></a>
+    </div>
+    <div class="row">
+
+      <div class="col-12">
+
+        <!-- Current Reservations -->
+        <div class="card">
+            <div class="card-header">
+              <h4>Current Reservations</h4>
+            </div>
+            <div class="card-body">
+              <ul id="tableList" class="list-group"></ul>
+            </div>
+          </div>
+          <!-- Waiting List -->
+          <div class="card">
+            <div class="card-header">
+              <h4>Waiting List</h4>
+              <div id="test"></div>
+            </div>
+            <div class="card-body">
+              <ul id="waitList" class="list-group"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      </div>
+ 
+      <!-- Bottom Links -->
+      <footer class="">
+        <div class="container">
+          <p><a href="#" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API
+              Wait List</a>
+        </div>
+      </footer>
+
+  <script type="text/javascript">
+
+    $( document ).ready(function() {
+
+        $.get("/api/tables", function(data) {
+        console.log(data);
+        if (data) {
+          $("#test").text("hello");
+            let newList = $("<ul>");
+            newList.addClass("list-group");
+
+
+            for(let i = 0; i < data.length; i++) {
+              
+                let nameItem = $("<li>");
+                let phoneItem = $("<li>");
+                let emailItem = $("<li>");
+                let IDItem = $("<li>");
+
+                nameItem.addClass("list-group-item");
+                phoneItem.addClass("list-group-item");
+                emailItem.addClass("list-group-item");
+                IDItem.addClass("list-group-item");
+
+                nameItem.text(data[i].name);
+                phoneItem.text(data[i].phone);
+                emailItem.text(data[i].email);
+                IDItem.text(data[i].id);
+
+                newList.append(nameItem);
+                newList.append(phoneItem);
+                newList.append(emailItem);
+                newList.append(IDItem);
+
+                console.log(data[i].name);
+                console.log(data[i].phone);
+              
+            }
+
+          $("#tableList").append(newList);
+        } else {
+          $("#test").text(
+            "Not found.");
+        }
+      });
+
+    });
+
+    // Question: What does this code do?
+    $("#add-btn").on("click", function(event) {
+      event.preventDefault();
+      var newCharacter = {
+        name: $("#name").val().trim(),
+        role: $("#role").val().trim(),
+        age: $("#age").val().trim(),
+        forcePoints: $("#force-points").val().trim()
+      };
+
+      // Question: What does this code do??
+      $.post("/api/characters", newCharacter)
+        .then(function(data) {
+          console.log("add.html", data);
+          alert("Adding character...");
+        });
+    });
+  </script>
+
+</body>
+</html>
