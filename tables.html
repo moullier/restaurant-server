@@ -15,12 +15,14 @@
 
   <div class="container">
     <div class="jumbotron">
-      <h1>Hot Restaurant</h1>
+      <h1 class="text-center">Hot Restaurant</h1>
 
-      <h3>View Tables!</h3>
+      <h3 class="text-center">View Tables!</h3>
       <hr>
-      <a href="./reservation"><button class="btn btn-danger btn-lg"><span class="fa fa-eye"></span>Make Reservation</button></a>
-      <a href="./index"><button class="btn btn-secondary btn-lg"><span class="fa fa-home"></span></button></a>
+      <div class="text-center">
+        <a href="./reservation"><button class="btn btn-danger btn-lg"><span class="fa fa-eye"></span>Make Reservation</button></a>
+        <a href="./index"><button class="btn btn-secondary btn-lg"><span class="fa fa-home"></span></button></a>
+      </div>
     </div>
     <div class="row">
 
@@ -66,63 +68,86 @@
         $.get("/api/tables", function(data) {
         console.log(data);
         if (data) {
-          $("#test").text("hello");
+
+          for(let i = 0; i < data.length; i++) {
             let newList = $("<ul>");
             newList.addClass("list-group");
 
+            let nameItem = $("<li>");
+            let phoneItem = $("<li>");
+            let emailItem = $("<li>");
+            let IDItem = $("<li>");
 
-            for(let i = 0; i < data.length; i++) {
-              
-                let nameItem = $("<li>");
-                let phoneItem = $("<li>");
-                let emailItem = $("<li>");
-                let IDItem = $("<li>");
+            nameItem.addClass("list-group-item");
+            phoneItem.addClass("list-group-item");
+            emailItem.addClass("list-group-item");
+            IDItem.addClass("list-group-item");
 
-                nameItem.addClass("list-group-item");
-                phoneItem.addClass("list-group-item");
-                emailItem.addClass("list-group-item");
-                IDItem.addClass("list-group-item");
+            nameItem.text(data[i].name);
+            phoneItem.text(data[i].phone);
+            emailItem.text(data[i].email);
+            IDItem.text(data[i].id);
 
-                nameItem.text(data[i].name);
-                phoneItem.text(data[i].phone);
-                emailItem.text(data[i].email);
-                IDItem.text(data[i].id);
+            newList.append(nameItem);
+            newList.append(phoneItem);
+            newList.append(emailItem);
+            newList.append(IDItem);
 
-                newList.append(nameItem);
-                newList.append(phoneItem);
-                newList.append(emailItem);
-                newList.append(IDItem);
+            console.log(data[i].name);
+            console.log(data[i].phone);
 
-                console.log(data[i].name);
-                console.log(data[i].phone);
-              
-            }
+            let table = i + 1;
+            $("#tableList").append("Table #" + table);
+            $("#tableList").append(newList);
+            
+          }
 
-          $("#tableList").append(newList);
+
         } else {
           $("#test").text(
             "Not found.");
         }
       });
 
-    });
 
-    // Question: What does this code do?
-    $("#add-btn").on("click", function(event) {
-      event.preventDefault();
-      var newCharacter = {
-        name: $("#name").val().trim(),
-        role: $("#role").val().trim(),
-        age: $("#age").val().trim(),
-        forcePoints: $("#force-points").val().trim()
-      };
+      $.get("/api/waitlist", function(data) {
+        console.log("waitlist = " + data);
+        if (data) {
 
-      // Question: What does this code do??
-      $.post("/api/characters", newCharacter)
-        .then(function(data) {
-          console.log("add.html", data);
-          alert("Adding character...");
-        });
+          for(let i = 0; i < data.length; i++) {
+            let newList = $("<ul>");
+            newList.addClass("list-group");
+
+            let nameItem = $("<li>");
+            let phoneItem = $("<li>");
+            let emailItem = $("<li>");
+            let IDItem = $("<li>");
+
+            nameItem.addClass("list-group-item");
+            phoneItem.addClass("list-group-item");
+            emailItem.addClass("list-group-item");
+            IDItem.addClass("list-group-item");
+
+            nameItem.text(data[i].name);
+            phoneItem.text(data[i].phone);
+            emailItem.text(data[i].email);
+            IDItem.text(data[i].id);
+
+            newList.append(nameItem);
+            newList.append(phoneItem);
+            newList.append(emailItem);
+            newList.append(IDItem);
+
+            console.log(data[i].name);
+            console.log(data[i].phone);
+
+            let table = i + 1;
+            $("#waitList").append("Table #" + table);
+            $("#waitList").append(newList);
+          }
+        }
+      });
+
     });
   </script>
 

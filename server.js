@@ -12,10 +12,17 @@ let PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-let reservations = [{name: "Maria",
-phone: "520-213-1232",
-email: "moullier@gmail.com",
-id: "372"}];
+let reservations = [{
+    name: "Maria",
+    phone: "520-213-1232",
+    email: "moullier@gmail.com",
+    id: "372"}];
+
+let waitlist = [{
+    name: "Steven",
+    phone: "520-234-9000",
+    email: "steven@jensen.com",
+    id: "430"}];
 
 // Routes
 // =============================================================
@@ -36,6 +43,10 @@ app.get("/tables", function(req, res) {
 // Displays all characters
 app.get("/api/tables", function(req, res) {
   return res.json(reservations);
+});
+
+app.get("/api/waitlist", function(req, res) {
+    return res.json(waitlist);
 });
 
 // Displays a single character, or returns false
@@ -59,17 +70,19 @@ app.post("/api/addreservation", function(req, res) {
   // This works because of our body parsing middleware
 
   let newReservation = req.body;
-  console.log(newReservation);
-
-  // Using a RegEx Pattern to remove spaces from newCharacter
-  // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-  newReservation.routeName = newReservation.name.replace(/\s+/g, "").toLowerCase();
-
+  //console.log(newReservation);
+  console.log(reservations);
   
+  let onWaitlist = false;
 
-   reservations.push(newCharacter);
+  if(reservations.length >= 5) {
+    waitlist.push(newReservation);
+    onWaitlist = true;
+  } else {
+    reservations.push(newReservation);
+  }
 
-   res.json(newReservation);
+  res.json(onWaitlist);
 });
 
 // Starts the server to begin listening
